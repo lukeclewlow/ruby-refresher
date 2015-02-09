@@ -31,7 +31,7 @@ end
 # [['Bob', 'Clive'], ['Bob', 'Dave'], ['Clive', 'Dave']]
 # make sure you don't have the same pairing twice, 
 def every_possible_pairing_of_students(array)
-
+	array.combination(2).to_a
 end
 
 # discard the first 3 elements of an array, 
@@ -128,7 +128,7 @@ end
 # [1, 3, 5, 4, 1, 2, 6, 2, 1, 3, 7]
 # becomes [1, 3, 5, 4, 1, 2]
 def get_elements_until_greater_than_five(array)
-	
+	array.take_while { |x| x < 6 }	
 end
 
 # turn an array (with an even number of elements) into a hash, by
@@ -143,8 +143,8 @@ end
 # . e.g. the array ['cat', 'dog', 'fish'] becomes
 # ['a', 'c', 'd', 'f', 'g', 'h', 'i', 'o', 's', 't']
 def get_all_letters_in_array_of_words(array)
-	letters = []
-	letters = array.each { |x| x.split(//) }
+	all_words = array.join
+	all_words.split(//).sort
 end
 
 # swap the keys and values in a hash. e.g.
@@ -191,8 +191,7 @@ end
 # get the domain name *without* the .com part, from an email address
 # so alex@makersacademy.com becomes makersacademy
 def get_domain_name_from_email_address(email)
-	domain = email[/@(.*?)./]
-	domain
+	domain = email.gsub(/.+@([^.]+).+/, '\1')
 end
 
 # capitalize the first letter in each word of a string, 
@@ -201,13 +200,18 @@ end
 # 'the lion the witch and the wardrobe' becomes
 # 'The Lion the Witch and the Wardrobe'
 def titleize_a_string(string)
+	stopwords = %w[a an and or of the from by]
+	stopwords.map!(&:downcase)
+    string.gsub!(/\w+/) do |w|
+      stopwords.include?(w.downcase) ? w.downcase : w.capitalize
+    end.gsub!(/^\w/,&:capitalize)
 end
 
 # return true if a string contains any special characters
 # where 'special character' means anything apart from the letters
 # a-z (uppercase and lower) or numbers
 def check_a_string_for_special_characters(string)
-	# string.include?("@", "!")
+	string.match(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
 end
 
 # get the upper limit of a range. e.g. for the range 1..20, you
@@ -219,18 +223,23 @@ end
 # should return true for a 3 dot range like 1...20, false for a 
 # normal 2 dot range
 def is_a_3_dot_range?(range)
-	# true if range.max == range.last
+	range.exclude_end?
 end
 
 # get the square root of a number
 def square_root_of(number)
-	
+	Math.sqrt(number)
 end
 
 # count the number of words in a file
 def word_count_a_file(file_path)
-	# array = []
-	# 
+	i = 0
+	file = File.open(file_path, "r")
+	file.inspect
+	# file.each_word do |word|
+	# 	i += 1
+	# end
+	# i
 end
 
 # --- tougher ones ---
@@ -239,13 +248,14 @@ end
 # called call_method_from_string('foobar')
 # the method foobar should be invoked
 def call_method_from_string(str_method)
-	str_method.to_sym
+	self.send(str_method)
 end
 
 # return true if the date is a uk bank holiday for 2014
 # the list of bank holidays is here:
 # https://www.gov.uk/bank-holidays
 def is_a_2014_bank_holiday?(date)
+
 end
 
 # given your birthday this year, this method tells you
@@ -253,6 +263,7 @@ end
 # e.g. january 1st, will next be a friday in 2016
 # return the day as a capitalized string like 'Friday'
 def your_birthday_is_on_a_friday_in_the_year(birthday)
+
 end
 
 # in a file, total the number of times words of different lengths
@@ -276,4 +287,5 @@ end
 # at the end.
 # (there's no RSpec test for this one)
 def ninety_nine_bottles_of_beer
+
 end
